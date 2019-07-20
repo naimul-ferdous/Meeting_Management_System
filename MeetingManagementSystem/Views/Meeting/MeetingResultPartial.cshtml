@@ -1,0 +1,85 @@
+﻿@model MeetingManagementSystem.ViewModels.ShowMeetingDetailsVM
+<div class="row">
+    @*modal start*@
+    <div class="modal fade" id="myModals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Add Meeting Result</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form id="meetingResultForm">
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                <label class="col-md-4 control-label"> Announcement: </label>
+                                <div class="col-md-8">
+                                    <input class="form-control" id="announcementTxt" name="Announcement" type="text" placeholder="Announcement" />@*<span class="required">*</span>*@
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-4 control-label"> Result: </label>
+                                <div class="col-md-8">
+                                    <input class="form-control" id="resultTxt" name="Result" type="text" placeholder="Result" />@*<span class="required">*</span>*@
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-4 control-label"> Status: </label>
+                                <div class="col-md-8">
+                                    <input class="form-control" id="statusTxt" name="Status" type="text" placeholder="Status" />@*<span class="required">*</span>*@
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label">Employee :</label>
+                                <div class="col-lg-8">
+                                    @*@Html.DropDownList("EmployeeId", new SelectList("", ""), new { @Class = "form-control resizeInput" })*@
+                                    @Html.DropDownListFor(a => a.EmployeeId, new SelectList(Model.Employees, "EmployeeId", "EmployeeName"), new { @Class = "form-control resizeInput" })
+
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="MeetingId" value="@Model.Meeting.MeetingId" />
+
+                            <div class="form-group">
+                                <div class="col-md-offset-4 col-md-8">
+                                    <div class="pull-right" style="margin-right: 18px">
+                                        <button style="margin-right: 5px; width: 70px" id="saveMeetingResultButton" type="button" class="btn btn-success">Save</button>
+                                        <input style="width: 70px" id="clearButton" type="reset" value="Clear" class="btn btn-primary" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*modal end*@
+    <div class="col-md-12" style="margin-top: 0px">
+        <div class="panel panel-info" style="margin-top: 8px">
+            <div class="panel-heading text-center"><span class="panelHeadText">Meeting Result</span></div>
+            <div class="panel-body">
+                <div>
+                    <table id="resultTableElements" class="table table-bordered table-striped table-condensed" style="width: 100%"></table>
+                </div>
+                <div class="table table-responsive">
+                    <button id="openModalButton" data-toggle="modal" data-target="#myModals" class="btn btn-success">Add New</button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

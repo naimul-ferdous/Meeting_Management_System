@@ -1,0 +1,122 @@
+﻿
+
+<link href="~/Content/jquery-ui.css" rel="stylesheet" />
+<style>
+    .ui-menu {
+        width: 150px;
+        width: 100%;
+        z-index: 100;
+        margin: 0 auto 0 auto;
+        background: skyblue !important;
+        /*padding: 15px 25px;*/
+    }
+
+        .ui-menu li a {
+            display: block;
+            padding: 5px 5px 5px 20px !important;
+            /*color: #fff;*/
+            font-size: 16px;
+            transition: .2s;
+        }
+    .scrollStyle
+    {
+        max-height: 150px;
+        overflow-y: scroll;
+    }
+
+</style>
+<style>
+    .navbar-fixed-top, .navbar-fixed-bottom {
+        /*position: fixed;*/
+        right: 0;
+        left: 0;
+        z-index: 1030;
+        margin-bottom: 0;
+    }
+</style>
+@*<link href="~/Content/bootstrap-treeview.css" rel="stylesheet" />*@
+
+@*<div class="row">
+        <div id="menuTree"></div>
+    </div>*@
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+@*<script src="~/Scripts/jquery-ui.js"></script>*@
+
+@*<script src="~/Scripts/lib/AjaxManager.js"></script>*@
+@*<script src="~/Scripts/bootstrap-treeview.js"></script>*@
+<ul id="menu"></ul>
+<script>
+
+    var MenuManager = {
+
+        GetData: function () {
+            alert("Get data called");
+
+            $.ajax({
+                url: '/ResourceTree/GetMenus/',
+                type: "GET",
+                datatype: "Json",
+                success: function (jsonData) {
+                    //debugger;
+                    // menu.render(jsonData);
+                    return jsonData;
+                },
+                error: function () {
+                    alert("My error occured");
+                }
+
+            });
+        }
+    };
+    $(document).ready(function () {
+        // MenuManager.GetData();
+        //$('#menuTree').treeview({
+        //    //primaryKey: 'id',
+        //    //uiLibrary: 'materialdesign',
+        //    data: GetTreeData(),
+
+        //    //enableLinks: true
+        //    //imageUrlField: 'flagUrl'
+        //});
+        //function initTree(treeData) {
+        //    $('#menuTree').treeview({
+        //        data: treeData,
+        //        enableLinks: true
+        //    });
+        //};
+        $.ajax({
+            url: '/ResourceTree/GetMenus/',
+            type: "GET",
+            datatype: "Json",
+            success: function (jsonData) {
+                buildMenu($('#menu'), jsonData);
+                $('#menu').menu();
+                //return jsonData;
+            },
+            error: function () {
+                alert("My error occured");
+            }
+
+        });
+        function buildMenu(parent, items) {
+            $.each(items, function () {
+                var li = $('<li><a href = ' + this.href + '>' + this.text + '</a></li>');
+                //if (!this.Active) {
+                //     li.addClass('ui-state-disabled');
+                //}
+                li.appendTo(parent);
+                //if (this.List && this.List.length > 0)
+                //{
+                //    var ul = $("<ul></ul>");
+                //    ul.appendTo(li);
+                //    buildMenu(ul, this.List);
+                //}
+                if (this.nodes.length > 0) {
+                    var ul = $("<ul></ul>");
+                    ul.appendTo(li);
+                    buildMenu(ul, this.nodes);
+                }
+            });
+        };
+    });
+</script>

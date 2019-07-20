@@ -1,0 +1,78 @@
+﻿@model MeetingManagementSystem.ViewModels.ShowMeetingDetailsVM
+@Styles.Render("~/styles/DataTable")
+
+<div class="row" style="position: relative;">
+    <div class="col-md-12" style="padding: 0 10px 0">
+        <div class="modal fade" id="myImplementationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Add Implementation</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <form id="implementationForm">
+                            <div class="form-horizontal">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Description : </label>
+                                    <div class="col-md-8">
+                                        <input class="form-control" id="implementationDescriptionTxt" name="ImplementationDescription" type="text" value="" placeholder="Implementation Description" />
+                                    </div>
+                                </div>
+
+                                @*<div class="form-group">
+                                    <label class="col-lg-4 control-label">Meeting :</label>
+                                    <div class="col-lg-8">
+                                        @Html.DropDownListFor(m => m.MeetingId, new SelectList("", ""), new { @Class = "form-control resizeInput" })
+                                    </div>
+                                </div>*@
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">Employee :</label>
+                                    <div class="col-lg-8">
+                                        @*@Html.DropDownListFor(emp => emp.EmployeeId, new SelectList("", ""), new { @Class = "form-control resizeInput select2", @id = "implementationEmployeeId" })*@
+                                        @Html.DropDownListFor(a => a.EmployeeId, new SelectList(Model.Employees, "EmployeeId", "EmployeeName"), new { @Class = "form-control resizeInput" })
+                                        </div>
+                                </div>
+                                <input type="hidden" name="MeetingId" value="@Model.Meeting.MeetingId" />
+                                <div class="form-group">
+                                    <div class="col-md-offset-4 col-md-8">
+                                        <div class="pull-right" style="margin-right: 18px">
+                                            <button style="margin-right: 5px; width: 70px" id="implementationSaveButton" type="button" class="btn btn-success">Save</button>
+                                            <input style="width: 70px" id="clearButton" type="reset" value="Clear" class="btn btn-primary" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*</div>*@
+    <div class="col-md-12">
+        <div class="panel panel-info" style="margin-top: 8px">
+            <div class="panel-heading text-center"><span class="panelHeadText">List of Implementation</span></div>
+            <div class="panel-body">
+
+                <div id="implementationTable">
+
+                    <table id="implementationTableElement" class="table table-bordered table-striped table-condensed" style="width: 100%"></table>
+                </div>
+
+                <button id="openModalButton" data-toggle="modal" data-target="#myImplementationModal" class="btn btn-success">Add New</button>
+
+            </div>
+
+        </div>
+    </div>
+</div>

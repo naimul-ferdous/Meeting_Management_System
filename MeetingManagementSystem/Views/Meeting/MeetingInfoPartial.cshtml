@@ -1,0 +1,183 @@
+﻿@*modal start*@
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" id="crossClose" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Add Meeting Agenda</h4>
+            </div>
+
+            <div class="modal-body">
+                <form id="meetingAgendaForm">
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="meetingAgendaNameTxt">Meeting Agenda : </label><span id="agendaMsg"></span>
+                            <div class="col-md-8">
+
+                                <input class="form-control" id="meetingAgendaNameTxt" onkeyup="Agenda()" name="MeetingAgendaName" type="text" value=""  placeholder="Meeting Agenda Name" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">Presenter :</label>
+                            <div class="col-lg-8">
+                                @Html.DropDownListFor(emp =>emp .EmployeeId, new SelectList("", ""), new { @Class = "form-control resizeInput select2" })
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+                            <label class="col-md-4 control-label" for="presenterTxt">Presenter : </label><span id="presenterMsg"></span>
+                            <div class="col-md-8">
+                                <input class="form-control" id="presenterTxt" onkeyup="meetingPresenter()" name="Presenter" type="text" value="" placeholder="Presenter" />
+                            </div>
+                        </div>*@
+
+                        <input type="hidden" name="MeetingId" value="@Model.Meeting.MeetingId" />
+
+                        <div class="form-group">
+                            <div class="col-md-offset-4 col-md-8">
+                                <div class="pull-right" style="margin-right: 18px">
+                                    <button style="margin-right: 5px; width: 70px" id="saveButton" type="button" class="btn btn-success">Save</button>
+                                    <input style="width: 70px" id="clearButton" type="reset" value="Clear" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="closeButton" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@using MeetingManagementSystem.ViewModels
+@model MeetingManagementSystem.ViewModels.ShowMeetingDetailsVM
+
+@*modal end*@
+<h2>Meeting Details</h2>
+<div class="panel panel-info" style="margin-top: 8px">
+    <div class="panel-heading text-center"><span class="panelHeadText">Meeting Info</span></div>
+    <div class="panel-body ">
+        <hr />
+        <dl class="dl-horizontal col-md-6">
+
+            <dt>
+                @Html.DisplayName("MeetingName")
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Meeting.MeetingName)
+            </dd>
+            <dt>
+                @Html.DisplayName("Meeting Caller")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Meeting.Employee.EmployeeName)
+            </dd>
+            <dt>
+                @Html.DisplayName("Beginning Time")
+            </dt>
+            @{
+                var beginningTime = Model.Meeting.BeginningTime.ToString("f");
+                var endTime = Model.Meeting.EndTime.ToString("f");
+            }
+            <dd>
+
+                @Html.DisplayName(beginningTime)
+            </dd>
+            <dt>
+                @Html.DisplayName("End Time")
+            </dt>
+
+            <dd>
+                @Html.DisplayName(endTime)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("Meeting Description")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Meeting.MeetingDescription)
+            </dd>
+            <dt>
+                @Html.DisplayName("Venue")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Meeting.Venue.VenueName)
+            </dd>
+            <dt>Files</dt>
+
+            @foreach (var item in Model.meetingFileUploads)
+            {
+
+                <dd>
+                    @Html.DisplayFor(modelItem => item.FileName)
+                </dd>
+
+                <dd>
+                    @Html.ActionLink("Download", "DownLoadFile", "MeetingMembers", new { id = item.MeetingFileUploadId }, null) |
+                    <button type="button" class="btn-link abc" value="@item.MeetingFileUploadId">Delete</button>
+                </dd>
+
+
+            }
+
+            <dt>Upload File</dt>
+            <dd>
+                @*<form id="meetingFileForm" action="UploadFile" method="post" enctype="multipart/form-data">*@
+                @using (Html.BeginForm("UploadFile", "MeetingMembers", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="form-group">
+                        <div class="">
+                            <input type="file" name="file" />
+                        </div>
+                    </div>
+                    <input type="hidden" name="MeetingId" value="@Model.Meeting.MeetingId" />
+                    <div class="form-group">
+                        <div class="">
+                            <button class="btn btn-default btn-sm" id="saveFile" type="submit">Upload</button>
+                        </div>
+                    </div>
+                }
+
+                @*</form>*@
+
+            </dd>
+            @{
+                UserSessionVM userSession = (UserSessionVM)Session["UserSession"];
+            }
+            @if (userSession.Role.SecRole.RoleName == "Admin")
+            {
+                <dt>File Archive</dt>
+                <dd>
+                    @Html.ActionLink("Open", "MeetingFileArchive", "Meeting", new { id = Model.Meeting.MeetingId }, null)
+                </dd>
+            }
+            
+        </dl>
+        <input type="hidden" id="meetingId" value="@Model.Meeting.MeetingId" />
+        <div class="col-md-6" style="margin-top: 0px">
+
+            <div class="panel panel-info" style="margin-top: 8px">
+
+                <div class=" text-center"><span class="panelHeadText">Meeting Agenda</span></div>
+                <div class="panel-body">
+                    <div class="table table-responsive">
+                        <table id="agendaTableElement" class="table   table-condensed" style="width: 100%"></table>
+                    </div>
+                    <button id="openModalButton" data-toggle="modal" data-target="#myModal" class="btn btn-sm btn-primary ">Add Agenda</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

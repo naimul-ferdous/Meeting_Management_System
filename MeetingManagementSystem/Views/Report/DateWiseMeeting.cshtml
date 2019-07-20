@@ -1,0 +1,100 @@
+﻿@model MeetingManagementSystem.Models.Meeting
+@{
+    ViewBag.Title = "DateWiseMeeting";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>DateWiseMeeting</h2>
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/lib/Messages.js"></script>
+<script src="~/Scripts/lib/notifit.js"></script>
+<script src="~/Scripts/lib/AjaxManager.js"></script>
+<script src="~/Scripts/lib/jquery.datetimepicker.js"></script>
+<link href="~/Content/notifIt.css" rel="stylesheet" />
+
+<style>
+    h2 {
+        border-bottom: 8px solid #57c4d0;
+        font-size: 24px;
+        display: inline-block;
+    }
+
+    .title {
+        border-bottom: 1px solid #000000;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+</style>
+
+<div class="row" style="margin-bottom:30px">
+    <div class="col-md-offset-4 col-md-8">
+        <h2 class="title">Meeting List</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-horizontal">
+            
+            
+            @*<div class="form-group">
+                <label class="col-md-4 control-label">Date From :</label>
+                <div class="col-md-8">
+                    <input class="form-control" id="dateFrom" type="date" name="BeginningTime" value="" />
+                </div>
+            </div>
+            
+    
+            
+            <div class="form-group">
+                <label class="col-md-4 control-label">Date To :</label>
+                <div class="col-md-8">
+                    <input class="form-control" id="dateTo" type="date" name="EndTime" value="" />
+                </div>
+            </div>*@
+
+            <div class="form-group">
+                <label class="col-md-4 control-label">Date From :</label>
+                <div class="col-md-8">
+                    @Html.TextBox("BeginningTime", "", new { @Class = "form-control resizeInput pickDate", @Placeholder = "MM/DD/YYYY"})
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label">Date To :</label>
+                <div class="col-md-8">
+                    @Html.TextBox("EndTime", "", new { @Class = "form-control resizeInput pickDate", @Placeholder = "MM/DD/YYYY"})
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-4 control-label">Venue :</label>
+                <div class="col-lg-8">
+                    @Html.DropDownListFor(a => a.VenueId, new SelectList("", ""), new { @Class = "form-control resizeInput" })
+
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-lg-4 control-label">Employee :</label>
+                <div class="col-lg-8">
+                    @Html.DropDownListFor(e => e.EmployeeId, new SelectList("", ""), new { @Class = "form-control resizeInput" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-4 col-md-8">
+                    <div class="resizeInput">
+                        <button class="btn btn-block btn-flat btn-success pull-right" id="dateWiseMeetingButton" type="button" style="width: 90px">Meeting</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/Custom/Report/DateWiseMeeting.js"></script>

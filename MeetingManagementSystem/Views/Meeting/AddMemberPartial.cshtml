@@ -1,0 +1,149 @@
+﻿@model MeetingManagementSystem.ViewModels.AddMemberVM
+
+@{
+
+    var loop1 = 0;
+    var loop2 = 0;
+
+}
+
+
+@*modal start*@
+<div class="modal fade" id="memberModal" tabindex="-1" role="dialog" aria-labelledby="memberModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="panel panel-info" style="margin-top: 8px">
+                    <div class="panel-heading text-center"><span class="panelHeadText">Available Employees</span></div>
+                    <div class="panel-body">
+                        <form id="meetingMemberForm">
+                            <input type="hidden" name="MeetingId" value="@Model.MeetingId" />
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#internals">Internal</a></li>
+                                <li><a data-toggle="tab" href="#externals">External</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="internals" class="tab-pane fade in active">
+                                    <div class="table table-responsive">
+
+                                        <table id="allEmployeesTable" class="table table-bordered table-striped table-condensed" style="width: 100%">
+                                            <thead>
+                                            <tr>
+                                                <th>
+                                                    <input type="checkbox" id="checkAllInternals"/>
+                                                </th>
+
+                                                <th>@Html.DisplayName("EmployeeId")</th>
+                                                <th>@Html.DisplayName("MeetingId")</th>
+                                                <th>
+                                                    @Html.DisplayName("EmployeeName")
+                                                </th>
+                                                <th>@Html.DisplayName("Department")</th>
+
+                                                <th>
+                                                    @Html.DisplayName("Designation")
+                                                </th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @foreach (var item in Model.AvailableEmployees)
+                                            {
+
+                                                <tr>
+                                                    <td>
+                                                        <input type="checkbox" name="internalIds" id="@Model.AvailableEmployees.ToList()[loop1].EmployeeId"/>
+
+                                                    </td>
+                                                    <td>@Html.HiddenFor(modelItem => Model.AvailableEmployees.ToList()[loop1].EmployeeId)</td>
+                                                    <td> @Html.HiddenFor(modelItem => Model.AvailableEmployees.ToList()[loop1].MeetingId)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.Employee.EmployeeName)</td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Department.DepartmentName)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Designation.DesignationName)
+                                                    </td>
+                                                </tr>
+                                                loop1 = loop1 + 1;
+                                            }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div id="externals" class="tab-pane fade">
+                                    <div class="table table-responsive">
+
+                                        <table id="allExternalsTable" class="table table-bordered table-striped table-condensed" style="width: 100%">
+                                            <thead>
+                                            <tr>
+                                                <th>
+                                                    <input type="checkbox" id="checkAllExternals"/>
+                                                </th>
+                                                <th>@Html.DisplayName("EmployeeId")</th>
+                                                <th>@Html.DisplayName("MeetingId")</th>
+                                                <th>
+                                                    @Html.DisplayName("EmployeeName")
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayName("Department")
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayName("Designation")
+                                                </th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @foreach (var item in Model.AvailableExternalMembers)
+                                            {
+
+                                                <tr>
+                                                    <td>
+                                                        @*@Html.CheckBoxFor(modelItem => Model.AvailableExternalMembers.ToList()[loop2].IsSelected, new { @class = "call-checkbox" })*@
+                                                        <input type="checkbox" name="externalIds" id="@Model.AvailableExternalMembers.ToList()[loop2].EmployeeId"/>
+                                                    </td>
+                                                    @*<td> @Html.HiddenFor(modelItem => Model.AvailableExternalMembers.ToList()[loop2].EmployeeId)</td>
+                                                    <td> @Html.HiddenFor(modelItem => Model.AvailableExternalMembers.ToList()[loop2].MeetingId)</td>*@
+
+                                                    <td> @Html.Raw(item.EmployeeId)</td>
+                                                    <td> @Html.Raw(item.MeetingId)</td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Department.DepartmentName)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Designation.DesignationName)
+                                                    </td>
+                                                </tr>
+                                                loop2 = loop2 + 1;
+                                            }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Add Members" class="btn btn-default btnAddMember" />
+                @*<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+@*modal end*@

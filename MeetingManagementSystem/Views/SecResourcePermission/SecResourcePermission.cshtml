@@ -1,0 +1,92 @@
+﻿@model MeetingManagementSystem.Models.SecResourcePermission
+@{
+    ViewBag.Title = "Resource Permission";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<link href="~/Content/notifIt.css" rel="stylesheet" />
+<link href="~/Content/gijgo.min.css" rel="stylesheet" />
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+
+<script src="~/Scripts/lib/Messages.js"></script>
+<script src="~/Scripts/lib/notifit.js"></script>
+
+<script src="~/Scripts/lib/AjaxManager.js"></script>
+<script src="~/Scripts/gijgo.js"></script>
+
+<style>
+    .dt-center {
+        text-align: center;
+    }
+
+    .spnDataTableEdit {
+        font-weight: bold;
+        color: #0083bd;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
+    .spnDataTableDelete {
+        font-weight: bold;
+        color: red;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+</style>
+<div class="row" style="position: relative;">
+    <div class="col-md-12" style="padding: 0 10px 0">
+
+
+        <div class="col-md-12">
+           
+            <div class=" col-md-6">
+                <h2 style="padding-left: 300px; padding-bottom: 30px ">Role Permission</h2>
+                <div class="form-horizontal">
+
+
+                    @*<div class="form-group">
+                <label class=" col-md-8  control-label">Role :</label>
+                <div class="col-md-4">
+                    @Html.DropDownList("SecRoleId", new SelectList("", ""), new { @Class = "form-control resizeInput" })
+                </div>
+            </div>*@
+
+                    <div class="form-group">
+                        <label class=" col-md-offset-2 col-md-3   control-label">Role :</label>
+                        <div class="col-md-offset-5">
+                            @Html.DropDownList("SecRoleId", new SelectList("", ""), new { @Class = "form-control resizeInput" })
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        @*<div id="ResourceWithRole">
+                @{
+                        Html.RenderAction("ResourceWithRole", "SecResourcePermission", new { id = 1 });
+                    }
+            </div>*@
+    </div>
+</div>
+
+<div class="col-md-2"></div>
+<div class="col-md-6">
+    <div class="row">
+        <div id="tree"></div>
+    </div>
+    <div class="row" style="height: 20px">
+
+    </div>
+    <div class="row">
+        <button id="btnSave" class="btn btn-default">Update Permission</button>
+    </div>
+</div>
+
+@*<script src="~/Scripts/Custom/SecResourcePermission.js"></script>*@
+@Html.IncludeVersionedJs("/Scripts/Custom/SecResourcePermission.js")

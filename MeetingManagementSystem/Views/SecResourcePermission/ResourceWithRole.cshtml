@@ -1,0 +1,76 @@
+﻿@model List<MeetingManagementSystem.ViewModels.ResourceRolePermissionVm>
+
+@{
+    int count = 0;
+    string subManu(int id)
+    {
+        count++;
+        string s = "<ul>";
+
+        if (Model.Where(a => a.Level == id).Count() == 0)
+        {
+
+            s += "<li><input type='checkbox'> Add" +
+                        "<input type='checkbox'> Edit" +
+                        "<input type='checkbox'> Delete</li>";
+
+        }
+        else
+        {
+            foreach (var ra in Model.Where(m => m.Level == id))
+            {
+
+
+                s += "<li><span id="+ra.MenuName+"><input type='checkbox'></span>" + ra.MenuName;
+                s += subManu(ra.SecResourceId);
+                s += "</li>";
+
+            }
+        }
+        s += "</ul>";
+        return s;
+    }
+}
+<div>
+    <ul id="ulId" class="treeview-red">
+        @foreach (var r in Model.Where(m => m.Level == 0).OrderBy(a => a.Order))
+        {
+           <li>
+               <span><input type='checkbox'>@r.MenuName</span>
+                @{
+                    string sa = subManu(r.SecResourceId);
+                }
+                @Html.Raw(sa)
+
+            </li>
+        }
+    </ul>
+</div>
+
+<link href="~/Content/jquery.treeview.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script
+    src="https://code.jquery.com/jquery-1.4.3.min.js"
+    integrity="sha256-+ACzmeXHpSVPxmu0BxF/44294FKHgOaMn3yH0pn4SGo="
+    crossorigin="anonymous"></script>
+@*<script src="~/Scripts/jquery-3.3.1.min.js"></script>*@
+<script src="~/Scripts/Custom/jquery.treeview.js"></script>
+
+
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+@*<script src="~/Scripts/jsTree3/jstree.js"></script>*@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#ulId").treeview({
+            animated: "fast",
+            collapsed: true,
+            unique: true,
+            persist: "cookie",
+            toggle: function () {
+                window.console && console.log("%o was toggled", this);
+            }
+        });
+
+    });
+</script>

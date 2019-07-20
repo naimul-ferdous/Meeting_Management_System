@@ -1,0 +1,66 @@
+﻿@model IEnumerable<MeetingManagementSystem.Models.MeetingFileUpload>
+@{
+    ViewBag.Title = "File Archive";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var MeetingId = ViewBag.MeetingId;
+}
+@Styles.Render("~/styles/DataTable")
+<h2>Meeting File Archive</h2>
+<div class="panel panel-info" style="margin-top: 8px">
+    <div class="panel-heading text-center"><span class="panelHeadText">All Files</span></div>
+    <div class="panel-body ">
+        <table id="filesTable" class="table table-bordered table-striped table-condensed" style="width: 100%">
+            <thead>
+            <tr>
+                <th>
+                    @Html.DisplayName("File")
+                </th>
+                <th>
+                    @Html.DisplayName("Deleted")
+                </th>
+                <th> Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FileName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsDeleted)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Download", "DownLoadFile", "MeetingMembers", new { id = item.MeetingFileUploadId }, null) |
+                        @if (item.IsDeleted)
+                        {
+                            @Html.ActionLink("Restore", "RestoreFile", "Meeting", new { id = item.MeetingFileUploadId, meetingId = item.MeetingId }, null)
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Delete", "DeleteFile", "Meeting", new { id = item.MeetingFileUploadId, meetingId = item.MeetingId }, null)
+                        }
+
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.ActionLink("Return to Meetings Details", "MeetingDetails", "Meeting",new { meetingId = MeetingId },null)
+        </div>
+    </div>
+</div>
+@Scripts.Render("~/bundles/DataTable")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#filesTable").dataTable();
+    });
+</script>

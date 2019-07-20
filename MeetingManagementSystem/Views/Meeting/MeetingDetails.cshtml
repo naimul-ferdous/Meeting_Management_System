@@ -1,0 +1,42 @@
+﻿@model MeetingManagementSystem.ViewModels.ShowMeetingDetailsVM
+
+@{
+    ViewBag.Title = "Meeting Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/lib/Messages.js"></script>
+<script src="~/Scripts/lib/notifit.js"></script>
+<script src="~/Scripts/lib/AjaxManager.js"></script>
+<link href="~/Content/notifIt.css" rel="stylesheet" />
+<link href="~/Content/TextEditor/jquery-te-1.4.0.css" rel="stylesheet" />
+<script src="~/Content/TextEditor/jquery-te-1.4.0.min.js"></script>
+
+
+@{
+    Html.RenderPartial("MeetingInfoPartial");
+    Html.RenderPartial("MeetingMembersPartial");
+    Html.RenderPartial("MeetingResultPartial");
+    Html.RenderPartial("ImplementationPartial");
+    Html.RenderPartial("MeetingDiscussionPartial");
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.ActionLink("Return to Meetings List", "Meeting", "Meeting")
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/DataTable")
+
+@Html.IncludeVersionedJs("/Scripts/Custom/MeetingAgenda.js")
+@Html.IncludeVersionedJs("/Scripts/Custom/Discussion.js")
+@Html.IncludeVersionedJs("/Scripts/Custom/MeetingResult.js")
+@Html.IncludeVersionedJs("/Scripts/Custom/MeetingMember.js")
+@Html.IncludeVersionedJs("/Scripts/Custom/Implementation.js")

@@ -1,0 +1,168 @@
+﻿@using MeetingManagementSystem.ViewModels
+
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var totalMeetings = ViewBag.TotalMeetings;
+    var thisWeekMeetings = ViewBag.ThisWeekMeetings;
+    var nextWeekMeetings = ViewBag.NextWeekMeetings;
+    var todayMeetings = ViewBag.TodayMeetings;
+    UserSessionVM userSession = (UserSessionVM)Session["UserSession"];
+}
+
+@Styles.Render("~/styles/DataTable")
+<style>
+    .vl {
+        border-left: 3px solid skyblue;
+        height: 250px;
+        position: relative;
+        padding-left: 30px;
+        margin-left: 3px;
+        top: 0;
+    }
+</style>
+<h2>Dashboard</h2>
+@if (userSession != null)
+{
+    <div class="jumbotron">
+
+        <h2 style="color: lightsalmon">Welcome Mr. @userSession.User.LoginName!</h2>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Meeting Summary</h2>
+            <hr />
+            @*<p><label><a href="#">Today Meetings :</a>@todayMeetings</label></p>*@
+            <p><label> @Html.ActionLink("This Week Meetings :", "Meeting", "Meeting", new { activeName = "thisWeekMeetings" }, null)  @thisWeekMeetings</label> </p>
+            <p><label> @Html.ActionLink("Next Week Meetings :", "Meeting", "Meeting", new { activeName = "nextWeekMeetings" }, null)  @nextWeekMeetings</label> </p>
+            <p><label> @Html.ActionLink("Total Meetings :", "Meeting", "Meeting", new { activeName = "allmeetings" }, null)  @totalMeetings</label> </p>
+        </div>
+        <div class="col-md-8">
+            <div class="vl">
+                <h2>Today's Meetings List </h2>
+                <hr />
+                <div class="table table-responsive">
+                    <table id="todayTableElement" class="table table-bordered table-striped table-condensed" style="width: 100%"></table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/moment.js"></script>
+<script src="~/Scripts/lib/AjaxManager.js"></script>
+@Scripts.Render("~/bundles/DataTable")
+<script type="text/javascript">
+    @*$(".openMeeting").click(function() {
+        //window.location.href = '@Url.Action("Meeting","Meeting")?open=' + $(this).attr('dataval');
+        window.open('@Url.Action("Meeting","Meeting")?activename=' + $(this).attr('dataval'),'_self');
+    });*@
+    $(document).ready(function() {
+
+        GetDataForTable();
+
+    });
+
+    function GetDataForTable() {
+        $.ajax({
+            url: '/Meeting/TodayMeetings/',
+            type: "Get",
+            // data: { venueId: venueId} ,
+            datatype: "Json",
+            success: function(jsonData) {
+                LoadDataTable(jsonData);
+            },
+            error: function() {
+
+            }
+        });
+    };
+
+    function LoadDataTable(data) {
+        dTable = $('#todayTableElement').DataTable({
+            dom: 'lB<"toolbar">frtip',
+            buttons: [
+                {
+                    extend: 'csvHtml5',
+                    exportOptions: {
+                        columns: [0, 1]
+                    },
+                    title: 'Meetings'
+                }, 'print', 'pdfHtml5'
+            ],
+
+            scrollY: "300px",
+            scrollX: true,
+            scrollCollapse: true,
+            lengthMenu: [[5, 10, 15, 40], [5, 10, 15, 40, "All"]],
+            columnDefs: [
+                { visible: false, targets: [] }, { className: "dt-center", targets: [0, 1, 2] }
+            ],
+            columns: [
+                {
+                    data: 'MeetingName',
+                    name: 'MeetingName',
+                    title: 'Meeting Name',
+                    width: 100,
+
+                }, {
+                    data: 'BeginningTime',
+                    name: 'BeginningTime',
+                    title: 'Beginning Date & Time',
+                    width: 100,
+                    render: function(data, type, row) {
+                        var date = moment(data);
+                        return date.format("MM-DD-YYYY HH:mm");
+                    }
+                }, {
+                    data: 'EndTime',
+                    name: 'EndTime',
+                    title: 'End Date & Time',
+                    width: 100,
+                    render: function(data, type, row) {
+                        var date = moment(data);
+                        return date.format("MM-DD-YYYY HH:mm");
+                    }
+                }, {
+                    data: 'EmployeeName',
+                    name: 'EmployeeName',
+                    title: 'Meeting Caller',
+                    width: 100,
+                }, {
+                    data: 'VenueName',
+                    name: 'VenueName',
+                    title: 'Venue',
+                    width: 100,
+                }, {
+                    title: 'Details',
+                    width: 100,
+
+                    render: function(data, type, row) {
+                        var meetingDetailsBtn = '';
+                        meetingDetailsBtn =
+                            ' <span class="glyphicon glyphicon-list-alt spnMeetingDetails" id="meetingDetailsBtn" title="Meeting Details"></span>';
+
+                        return meetingDetailsBtn;
+                    }
+
+                }
+            ],
+            data: data
+
+        });
+    }
+    var _id = null;
+    var dTable = null;
+    $(document).on('click','.spnMeetingDetails',function() {
+            var rowData = dTable.row($(this).parent()).data();
+            _id = rowData.MeetingId;
+            MeetingDetails(_id);
+        });
+
+    function MeetingDetails(meetingId) {
+        window.location.href = '/Meeting/MeetingDetails/?meetingId=' + meetingId;
+
+    }
+</script>

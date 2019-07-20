@@ -1,0 +1,64 @@
+﻿@model IEnumerable<MeetingManagementSystem.Models.SecResource>
+<div>
+    <ul>
+        @{foreach (var item in Model.Where(s => s.Level == 0).GroupBy(Obj => new { Obj.SecResourceId }).Distinct().ToList())
+            {
+                <li>
+                    @if (Model.Where(s => s.Level == item.FirstOrDefault().SecResourceId).Count() == 0)
+                    {
+                        <a href="@item.FirstOrDefault().ActionUrl">
+                            @item.FirstOrDefault().DisplayName
+
+                        </a>
+                    }
+
+                    @if (Model.Where(s => s.Level == item.FirstOrDefault().SecResourceId).Count() > 0)
+                    {
+                        <a id="parentMenu" href="#subPages" data-toggle="collapse" class="collapsed" aria-expanded="false">
+                           <span>@item.FirstOrDefault().DisplayName</span>
+                            <i class="icon-submenu lnr lnr-chevron-left"></i>
+                        </a>
+                       
+                        <div id="subPages" class="collapse" aria-expanded="false" style="height: 0px;">
+
+                            <ul>
+
+                                @{foreach (var firstItem in (Model.Where(s => s.Level == item.FirstOrDefault().SecResourceId).OrderBy(s=>s.Order).ToList()))
+                                    {
+                                        <li>
+                                            <a href="@firstItem.ActionUrl">
+                                                @firstItem.DisplayName
+
+
+                                            </a>
+                                            <ul>
+                                                @foreach (var secondItem in (Model.Where(s => s.Level == firstItem.SecResourceId).ToList()))
+                                                {
+                                                    <li>
+                                                        <a href="@secondItem.ActionUrl">
+                                                            @secondItem.DisplayName
+                                                        </a>
+
+                                                    </li>
+                                                }
+                                            </ul>
+
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+
+
+                    }
+
+
+
+                </li>
+            }
+        }
+    </ul>
+</div>
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>

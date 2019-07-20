@@ -1,0 +1,352 @@
+﻿@model MeetingManagementSystem.ViewModels.EmployeeVM
+@{
+    ViewBag.Title = "Employee";
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/lib/Messages.js"></script>
+<script src="~/Scripts/lib/notifit.js"></script>
+<script src="~/Scripts/lib/AjaxManager.js"></script>
+<link href="~/Content/notifIt.css" rel="stylesheet" />
+
+@Styles.Render("~/styles/DataTable")
+
+<style>
+    .dt-center {
+        text-align: center;
+    }
+
+    .spnDataTableEdit {
+        font-weight: bold;
+        color: #0083bd;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
+    .spnDataTableDelete {
+        font-weight: bold;
+        color: red;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+</style>
+
+<h3>Employee</h3>
+<div class="row" style="position: relative;">
+    <div class="col-md-12" style="padding: 0 10px 0">
+
+        @*modal start*@
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" id="closeIcon" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Add Employee</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <form id="employeeForm">
+                            <div class="form-horizontal">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                @*<div class="form-group">
+                                        <label class="col-md-4 control-label">Employee Name : </label>
+                                        <div class="col-md-8">
+                                            <input class="form-control" id="employeeNameTxt" name="EmployeeName" type="text" value="" placeholder="Employee Name" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                            <label class="col-md-4 control-label">Email :</label>
+                                            <div class="col-md-8">
+                                                <input class="form-control" id="emailTxt" name="Email" type="text" value="" placeholder="Email" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-md-4 control-label">Phone Number :</label>
+                                            <div class="col-md-8">
+                                                <input class="form-control" id="phoneNumberTxt" name="PhoneNumber" type="text" value="" placeholder="Phone Number" />
+                                            </div>
+                                        </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label">Address :</label>
+                                        <div class="col-md-8">
+                                            <input class="form-control" id="addressTxt" name="Address" type="text" value="" placeholder="Address" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                            <label class="col-md-4 control-label">Password :</label>
+                                            <div class="col-md-8">
+                                                <input class="form-control" id="passwordTxt" name="Password" type="password" value="" placeholder="Password" />
+                                            </div>
+                                        </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Office :</label>
+                                        <div class="col-lg-8">
+                                            @Html.DropDownListFor(o => o.OfficeId, new SelectList("", ""), new { @Class = "form-control resizeInput" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Department :</label>
+                                        <div class="col-lg-8">
+                                            @Html.DropDownListFor(d => d.DepartmentId, new SelectList("", ""), new { @Class = "form-control resizeInput" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Designation :</label>
+                                        <div class="col-lg-8">
+                                            @Html.DropDownListFor(dsg => dsg.DesignationId, new SelectList("", ""), new { @Class = "form-control resizeInput select2" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Employee Type :</label>
+                                        <div class="col-lg-8">
+                                            @Html.DropDownListFor(empT => empT.EmployeeTypeId, new SelectList("", ""), new { @Class = "form-control resizeInput" })
+                                        </div>
+                                    </div>*@
+                                @Html.Hidden("EmployeeId")
+                                @*<div id="OfficialId">*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.EmployeeOfficialId, htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-md-7">
+                                        @Html.EditorFor(model => model.EmployeeOfficialId, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.EmployeeOfficialId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                @*</div>*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.EmployeeName, htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-md-7">
+                                        @Html.EditorFor(model => model.EmployeeName, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.EmployeeName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-md-7">
+                                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-md-7">
+                                        @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-md-7">
+                                        @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.OfficeId, "Office", htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-md-7">
+                                        @Html.DropDownList("OfficeId", new SelectList("", ""), htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.OfficeId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.DepartmentId, "Department", htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-md-7">
+                                        @Html.DropDownList("DepartmentId", new SelectList("", ""), htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.DesignationId, "Designation", htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-md-7">
+                                        @Html.DropDownList("DesignationId", new SelectList("", ""), htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.DesignationId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.EmployeeTypeId, "Employee Type", htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-md-7">
+                                        @Html.DropDownList("EmployeeTypeId", new SelectList("", ""), htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.EmployeeTypeId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                @*<div id="passwordBlock">*@
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-7">
+                                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-7">
+                                            @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                @*</div>*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-md-7">
+                                        <div class="checkbox">
+                                            @Html.EditorFor(model => model.IsActive)
+                                            @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-offset-4 col-md-8">
+                                        <div class="pull-right" style="margin-right: 18px">
+                                            <button style="margin-right: 5px; width: 70px" id="saveButton" type="button" class="btn btn-success">Save</button>
+                                            @*onclick="$(this).resetValidation()"*@
+                                            <input style="width: 70px" id="clearButton" type="reset" value="Clear" class="btn btn-primary" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" id="closeButton" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*modal end*@
+
+    </div>
+
+
+
+
+    @*modal start*@
+    <div class="modal fade" id="myModalForEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Employee Details</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Employee Name : </label>
+                            <div class="col-md-8">
+                                <span class="form-control" id="employeeNameShow" name="EmployeeName"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Email :</label>
+                            <div class="col-md-8">
+                                <span class="form-control" id="emailShow" name="Email"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Phone Number :</label>
+                            <div class="col-md-8">
+                                <span class="form-control" id="phoneNumberShow" name="PhoneNumber"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Address :</label>
+                            <div class="col-md-8">
+                                <span class="form-control" id="addressShow" name="Address"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">Department Name :</label>
+                            <div class="col-lg-8">
+                                <span class="form-control" id="departmentNameShow" name="DepartmentName"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">Designation :</label>
+                            <div class="col-lg-8">
+                                <span class="form-control" id="designationNameShow"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">Office :</label>
+                            <div class="col-lg-8">
+                                <span class="form-control" id="officeNameShow"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">Employee Type :</label>
+                            <div class="col-lg-8">
+                                <span class="form-control" id="employeeTypeNameShow"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*modal end*@
+
+
+
+    <div class="col-md-12" style="margin-top: 0px">
+        <div>
+            <button id="openModalButton" data-toggle="modal" data-target="#myModal" class="btn btn-success">Add New</button>
+        </div>
+        <div class="panel panel-info" style="margin-top: 8px">
+            <div class="panel-heading text-center"><span class="panelHeadText">List of employees</span></div>
+            <div class="panel-body">
+                <div class="table table-responsive">
+                    <table id="tableElement" class="table table-bordered table-striped table-condensed" style="width: 100%"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+@Scripts.Render("~/bundles/DataTable")
+
+@Scripts.Render("~/bundles/jqueryval")
+@Html.IncludeVersionedJs("/Scripts/Custom/Employee.js")
+

@@ -1,0 +1,360 @@
+﻿@using MeetingManagementSystem.ViewModels
+@model MeetingManagementSystem.ViewModels.MeetingVM
+
+@{
+    ViewBag.Title = "Meeting";
+    UserSessionVM userSession = (UserSessionVM)Session["UserSession"];
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/lib/Messages.js"></script>
+<script src="~/Scripts/lib/notifit.js"></script>
+<script src="~/Scripts/lib/AjaxManager.js"></script>
+<link href="~/Content/notifIt.css" rel="stylesheet" />
+<script src="~/Scripts/moment.js"></script>
+<script src="~/Scripts/jquery.datetimepicker.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.css" />
+<style>
+</style>
+
+@*libraries added for member selection*@
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.jqueryui.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" />
+
+@*<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>*@
+@*<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>*@
+<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.13/js/dataTables.jqueryui.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.2.1/js/dataTables.select.min.js"></script>
+
+@*libraries added for member selection*@
+
+@Styles.Render("~/styles/DataTable")
+
+
+<style>
+    .dt-center {
+        text-align: center;
+    }
+    /*.a-button {
+        font: bold 11px Arial;
+        text-decoration: none;
+        background-color: #EEEEEE;
+        color: #333333;
+        padding: 2px 6px 2px 6px;
+        border-top: 1px solid #CCCCCC;
+        border-right: 1px solid #333333;
+        border-bottom: 1px solid #333333;
+        border-left: 1px solid #CCCCCC;
+    }*/
+    .spnDataTableEdit {
+        font-weight: bold;
+        color: #0083bd;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
+    .spnDataTableDelete {
+        font-weight: bold;
+        color: red;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
+    .required {
+        color: red;
+    }
+
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+        /* Style the buttons inside the tab */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 12px;
+        }
+
+            /* Change background color of buttons on hover */
+            .tab button:hover {
+                background-color: #ddd;
+            }
+
+            /* Create an active/current tablink class */
+            .tab button.active {
+                background-color: #ccc;
+            }
+
+    /* Style the tab content */
+
+
+</style>
+<h3>Meetings</h3>
+@if (userSession != null)
+{
+    if (userSession.RolePermissions.Count(c => c.SecResource.MenuName == "Meeting" && c.Add == true) > 0)
+    {
+        <div class="row" style="position: relative;">
+            <div class="col-md-12" style="padding: 0 10px 0">
+
+                @*modal start*@
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">Create Meeting</h4>
+                            </div>
+
+                            <div class="modal-body">
+                                <form id="meetingForm">
+                                    <div class="form-horizontal">
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                        <div class="form-group">
+                                            <label class="col-md-4 control-label">Meeting Name : </label>
+                                            <div class="col-md-8">
+                                                <input class="form-control" id="meetingNameTxt" name="MeetingName" type="text" value="" placeholder="Meeting Name" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-md-4 control-label">Beginning Date :</label>
+                                            <div class="col-md-8">
+                                                <input class="form-control" id="beginningdateTxt" name="BeginningDate" type="text" data-type="date" value="" placeholder="date" />
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label class="col-md-4 control-label">Beginning Time :</label>
+                                            <div class="col-md-8">
+                                                <input class="form-control" id="beginningTimeTxt" name="BeginningTime" type="time" value="" placeholder="Beginning Time" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-md-4 control-label">Ending Date :</label>
+                                            <div class="col-md-8">
+                                                <input class="form-control" id="enddateTxt" name="EndDate" type="text" data-type="date" value="" placeholder="date" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-md-4 control-label">Ending Time :</label>
+                                            <div class="col-md-8">
+                                                <input class="form-control" id="endTimeTxt" name="EndTime" type="time" value="" placeholder="Ending Time" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+
+                                            <div class="col-md-8">
+                                                <input class="form-control" id="statusTxt" name="Status" type="hidden" value="0" />
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Meeting Caller :</label>
+                                            <div class="col-lg-8">
+                                                @Html.DropDownListFor(a => a.EmployeeId, new SelectList("", ""), new { @Class = "form-control resizeInput" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Meeting Description :</label>
+                                            <div class="col-lg-8">
+                                                <input class="form-control" id="meetingDescriptionTxt" name="MeetingDescription" type="text" placeholder="Meeting Description" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.IsDeleted, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-7">
+                                                <div class="checkbox">
+                                                    @Html.EditorFor(model => model.IsDeleted)
+                                                    @Html.ValidationMessageFor(model => model.IsDeleted, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group presentVenueClass" id="presentVenue" style="display: none">
+                                            <label class="col-lg-4 control-label">Present Venue :</label>
+                                            <div class="col-lg-8">
+                                                <label class="form-control" id="presentVenueName" name="presentVenue" type="text"> </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-offset-4 col-md-8">
+                                                <div class="pull-right" style="margin-right: 18px">
+                                                    <button style="margin-right: 5px; width: 100px" id="loadVenueDropDownButton" type="button" class="btn btn-success">Load Venue</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group abc" id="loadVenue" style="display:none">
+                                            <label class="col-lg-4 control-label">Venue :</label>
+                                            <div class="col-lg-8">
+                                                @Html.DropDownListFor(a => a.VenueId, new SelectList("", ""), new { @Class = "form-control resizeInput" })
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-offset-4 col-md-8">
+                                                <div class="pull-right" style="margin-right: 18px">
+                                                    <button style="margin-right: 5px; width: 70px" id="saveButton" type="button" class="btn btn-success">Save</button>
+                                                    <input style="width: 70px" id="clearButton" type="reset" value="Clear" class="btn btn-primary" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*modal end*@
+                <div class="col-md-12" style="margin-top: 0px">
+                    <div>
+                        <button id="openModalButton" data-toggle="modal" data-target="#myModal" class="btn btn-success">Create new meeting</button>
+                    </div>
+
+
+
+                    <div class="panel panel-info" style="margin-top: 8px">
+                        <div class="panel-heading text-center"><span class="panelHeadText"> Meetings</span></div>
+                        <div class="panel-body">
+                            <div class="tab">
+                                <button id="allmeetings" class="btn  tablinks allmeeting">All Meeting</button>
+                                <button id="thisWeekMeetings" class="btn  tablinks thisWeekMeeting">Meeting of this week</button>
+                                <button id="nextWeekMeetings" class="btn  tablinks nextWeekMeeting">Meeting of next week</button>
+                            </div>
+                            <br />
+                            <div class="table table-responsive">
+                                <table id="tableElement" class="table table-bordered table-striped table-condensed" style="width: 100%"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                @*Member Modal start*@
+                <div class="modal fade" id="myMemberModal" tabindex="-1" role="dialog" aria-labelledby="myMemberModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="myMemberModalLabel">Add Member</h4>
+                            </div>
+
+
+                            <div class="modal-body">
+                                <form id="addMemberForm">
+                                    <div class="form-horizontal">
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                        <div>
+                                            @*<table width="50%" class="display" id="exampleTable" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>Position</th>
+                                                            <th>Office</th>
+
+                                                            <th>Start date</th>
+                                                            <th>Salary</th>
+                                                            <th>Extn</th>
+                                                            <th>Btn</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody></tbody>
+                                                </table>
+                                                <br />
+                                                <table width="50%" class="display" id="example2Table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>Position</th>
+                                                            <th>Office</th>
+                                                            <th>Start date</th>
+                                                            <th>Salary</th>
+                                                            <th>Extn</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody></tbody>
+                                                </table>*@
+
+                                        </div>
+
+                                        <div class="panel panel-info" style="margin-top: 8px">
+                                            <div class="panel-heading text-center"><span class="panelHeadText">All Employees</span></div>
+                                            <div class="panel-body">
+                                                <div class="table table-responsive">
+                                                    <table id="allEmployeesTable" class="table table-bordered table-striped table-condensed" style="width: 100%"></table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @*<div class="panel panel-info" style="margin-top: 8px">
+                                                <div class="panel-heading text-center"><span class="panelHeadText">selected Meeting Members</span></div>
+                                                <div class="panel-body">
+                                                    <div class="table table-responsive">
+                                                        <table id="selectedMembersTable" class="table table-bordered table-striped table-condensed" style="width: 100%"></table>
+                                                    </div>
+                                                </div>
+                                            </div>*@
+                                        <div class="form-group">
+                                            <div class="col-md-offset-4 col-md-8">
+                                                <div class="pull-right" style="margin-right: 18px">
+                                                    <button style="margin-right: 5px; width: 100px" id="addMemberButton" type="button" class="btn btn-success">Add Member</button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*Member Modal end*@
+
+            </div>
+
+
+
+        </div>
+    }
+}
+@Scripts.Render("~/bundles/DataTable")
+@Html.IncludeVersionedJs("/Scripts/Custom/All_Meetings.js")

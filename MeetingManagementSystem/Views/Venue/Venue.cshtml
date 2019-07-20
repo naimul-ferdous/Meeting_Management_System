@@ -1,0 +1,173 @@
+﻿@model MeetingManagementSystem.ViewModels.VenueVM
+@{
+    ViewBag.Title = "Venue";
+}
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/lib/Messages.js"></script>
+<script src="~/Scripts/lib/notifit.js"></script>
+<script src="~/Scripts/lib/AjaxManager.js"></script>
+<link href="~/Content/notifIt.css" rel="stylesheet" />
+
+@Styles.Render("~/styles/DataTable")
+
+<style>
+    .dt-center {
+        text-align: center;
+    }
+
+    .spnDataTableEdit {
+        font-weight: bold;
+        color: #0083bd;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
+    .spnDataTableDelete {
+        font-weight: bold;
+        color: red;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
+    .required {
+        color: red;
+    }
+</style>
+
+<h3>Venue</h3>
+<div class="row" style="position: relative;">
+    <div class="col-md-12" style="padding: 0 10px 0">
+
+        @*modal start*@
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Add Venue</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <form id="venueForm">
+                            <div class="form-horizontal">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Venue Name : </label>
+                                    <div class="col-md-8">
+                                        <input class="form-control" id="venueNameTxt" name="VenueName" type="text" value="" placeholder="Venue Name" />@*<span class="required">*</span>*@
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Capacity : </label>
+                                    <div class="col-md-8">
+                                        <input class="form-control" id="capacityTxt" name="Capacity" type="text" value="" placeholder="Capacity" />@*<span class="required">*</span>*@
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">Venue Type :</label>
+                                    <div class="col-lg-8">
+                                        @Html.DropDownListFor(a => a.VenueType, new SelectList("", ""), new { @Class = "form-control resizeInput" })
+                                    </div>
+                                </div>
+
+                                <h4>Address</h4>
+
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">House No : </label>
+                                    <div class="col-md-8">
+                                        <input class="form-control" id="houseNoTxt" name="HouseNo" type="text" value="" placeholder="House Number" />@*<span class="required">*</span>*@
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Road No : </label>
+                                    <div class="col-md-8">
+                                        <input class="form-control" id="roadNoTxt" name="RoadNo" type="text" value="" placeholder="Road Number" />@*<span class="required">*</span>*@
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Block : </label>
+                                    <div class="col-md-8">
+                                        <input class="form-control" id="blockTxt" name="Block" type="text" value="" placeholder="Block" />@*<span class="required">*</span>*@
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Area : </label>
+                                    <div class="col-md-8">
+                                        <input class="form-control" id="areaTxt" name="Area" type="text" value="" placeholder="Area" />@*<span class="required">*</span>*@
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Post Code : </label>
+                                    <div class="col-md-8">
+                                        <input class="form-control" id="postCodeTxt" name="PostCode" type="text" value="" placeholder="PostCode" />@*<span class="required">*</span>*@
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">Country :</label>
+                                    <div class="col-lg-8">
+                                        @Html.DropDownListFor(a => a.CountryId, new SelectList("", ""), new { @Class = "form-control resizeInput" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">District :</label>
+                                    <div class="col-lg-8">
+                                        @Html.DropDownListFor(a => a.DistrictId, new SelectList("", ""), new { @Class = "form-control resizeInput" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-offset-4 col-md-8">
+                                        <div class="pull-right" style="margin-right: 18px">
+                                            <button style="margin-right: 5px; width: 70px" id="saveButton" type="button" class="btn btn-success">Save</button>
+                                            <input style="width: 70px" id="clearButton" type="reset" value="Clear" class="btn btn-primary" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*modal end*@
+
+    </div>
+
+    <div class="col-md-12" style="margin-top: 0px">
+        <div>
+            <button id="openModalButton" data-toggle="modal" data-target="#myModal" class="btn btn-success">Add New</button>
+        </div>
+        <div class="panel panel-info" style="margin-top: 8px">
+            <div class="panel-heading text-center"><span class="panelHeadText">List of Venue</span></div>
+            <div class="panel-body">
+                <div class="table table-responsive">
+                    <table id="tableElement" class="table table-bordered table-striped table-condensed" style="width: 100%"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+@Scripts.Render("~/bundles/DataTable")
+<script src="~/Scripts/Custom/Venue.js"></script>
+

@@ -1,0 +1,320 @@
+﻿
+@using MeetingManagementSystem.Repositories
+@model MeetingManagementSystem.ViewModels.AddMemberVM
+
+@*@if (Model.AvailableEmployees.Any()|| Model.AvailableExternalMembers.Any())
+    {
+        <h4>
+
+            @Html.ActionLink("Send Email To All", "SendingEmailMembers", "MeetingMembers", new { _meetingId = Model.MeetingId }, null) |
+
+            @Html.ActionLink("Send Notification To All", "SendNotificationToCalender", "MeetingMembers", new { _meetingId = Model.MeetingId }, null)
+
+        </h4>
+    }*@
+@*<div class="col-md-12">
+        <div class="col-md-6">
+            <div class="table table-responsive">
+                <h3>Internal</h3>
+                <table id="internalsPartialTable" class="table table-bordered table-striped table-condensed" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayName("Member Name")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Department")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Designation")
+                        </th>
+
+                        <th> Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.AvailableEmployees)
+                        {
+
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Department.DepartmentName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Designation.DesignationName)
+                                </td>
+
+                                <td>
+                                    @{
+                                    MeetingRepository meeting=new MeetingRepository();
+                                        var meetingCallerEmployeeId = meeting.Get(Model.MeetingId).EmployeeId;
+                                    }
+                                    @if (item.EmployeeId != meetingCallerEmployeeId)
+                                    {
+                                        @Html.ActionLink("Remove Member", "RemoveMember", "MeetingMembers", new {employeeId = item.EmployeeId, _meetingId = item.MeetingId}, null)
+
+                                        @Html.Raw(" | ")
+                                    }
+                                    @Html.ActionLink("Send Email", "SendingEmailMember", "MeetingMembers", new {employeeId = item.EmployeeId, _meetingId = item.MeetingId}, null)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="table table-responsive">
+                <h3>External</h3>
+                <table id="externalsPartialTable" class="table table-bordered table-striped table-condensed" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayName("Member Name")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Department")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Designation")
+                        </th>
+
+                        <th> Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.AvailableExternalMembers)
+                        {
+
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Department.DepartmentName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Designation.DesignationName)
+                                </td>
+
+                                <td>@{
+                                        MeetingRepository meeting=new MeetingRepository();
+                                        var meetingCallerEmployeeId = meeting.Get(Model.MeetingId).EmployeeId;
+                                    }
+                                    @if (item.EmployeeId != meetingCallerEmployeeId)
+                                    {
+                                        @Html.ActionLink("Remove Member", "RemoveMember", "MeetingMembers", new {employeeId = item.EmployeeId, _meetingId = item.MeetingId}, null)
+
+                                        @Html.Raw(" | ")
+                                    }
+                                    @Html.ActionLink("Send Email", "SendingEmailMember", "MeetingMembers", new { employeeId = item.EmployeeId, _meetingId = item.MeetingId }, null)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>*@
+@*Update for Members conflicts with meeting schedule*@
+
+<div class="panel panel-info" style="margin-top: 8px">
+    <div class="panel-heading text-center"><span class="panelHeadText">Meeting Members</span></div>
+    <div class="panel-body">
+        <div id="meetingMembers">
+
+            @if (Model.AvailableEmployees.Any() || Model.AvailableExternalMembers.Any())
+            {
+                <h4>
+
+                    @Html.ActionLink("Send Email To All", "SendingEmailMembers", "MeetingMembers", new { _meetingId = Model.MeetingId }, null) |
+
+                    @Html.ActionLink("Send Notification To All", "SendNotificationToCalender", "MeetingMembers", new { _meetingId = Model.MeetingId }, null)
+
+                </h4>
+            }
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <div class="table table-responsive">
+
+                        <div class="panel panel-success" style="margin-top: 8px">
+                            <div class="panel-heading text-center" style="height: 5px !important"><span class="panelHeadText">Internals</span></div>
+                            <div class="panel-body">
+
+                                <h4>Internal</h4>
+                                <hr />
+                                <table id="internalsTable" class="table table-bordered table-striped table-condensed" style="width: 100%">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayName("Member Name")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Department")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Designation")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Status")
+                                            </th>
+                                            <th> Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.AvailableEmployees)
+                                        {
+
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Department.DepartmentName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Designation.DesignationName)
+                                                </td>
+                                                <td>
+                                                    @if (item.BeginningTime != Model.Meeting.BeginningTime || item.EndTime != Model.Meeting.EndTime)
+                                                    {
+                                                        if (item.IsBusy)
+                                                        {
+                                                            @Html.Raw("Busy")
+                                                        }
+                                                        if (item.IsBusy == false)
+                                                        {
+                                                            @Html.Raw("Available")
+                                                        }
+                                                    }
+                                                    @if (item.BeginningTime == Model.Meeting.BeginningTime && item.EndTime == Model.Meeting.EndTime)
+                                                    {
+                                                        @Html.Raw("Ok")
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (item.EmployeeId != Model.Meeting.EmployeeId)
+                                                    {
+                                                        @Html.ActionLink("Remove Member", "RemoveMember", "MeetingMembers", new { employeeId = item.EmployeeId, _meetingId = item.MeetingId }, null)
+
+                                                        @Html.Raw(" | ")
+
+                                                    }
+                                                    @if (item.BeginningTime != Model.Meeting.BeginningTime || item.EndTime != Model.Meeting.EndTime && item.IsBusy == false)
+                                                    {
+                                                        @Html.ActionLink("Update Schedule", "UpdateSchedule", "Meeting", new { employeeId = item.EmployeeId, _meetingId = item.MeetingId }, null)
+
+                                                        @Html.Raw(" | ")
+                                                    }
+                                                    @Html.ActionLink("Send Email", "SendingEmailMember", "MeetingMembers", new { employeeId = item.EmployeeId, _meetingId = item.MeetingId }, null)
+                                                </td>
+                                            </tr>
+
+
+                                        }
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="table table-responsive">
+
+                        <div class="panel panel-success" style="margin-top: 8px">
+                            <div class="panel-heading text-center" style="height: 5px !important"><span class="panelHeadText">Externals</span></div>
+                            <div class="panel-body">
+                                <h4>External</h4>
+                                <hr />
+                                <table id="externalsTable" class="table table-bordered table-striped table-condensed" style="width: 100%">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayName("Member Name")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Department")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Designation")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Status")
+                                            </th>
+                                            <th> Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.AvailableExternalMembers)
+                                        {
+
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Department.DepartmentName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Designation.DesignationName)
+                                                </td>
+                                                <td>
+                                                    @if (item.BeginningTime != Model.Meeting.BeginningTime || item.EndTime != Model.Meeting.EndTime)
+                                                    {
+                                                        if (item.IsBusy)
+                                                        {
+                                                            @Html.Raw("Busy")
+                                                        }
+                                                        if (item.IsBusy == false)
+                                                        {
+                                                            @Html.Raw("Available")
+                                                        }
+                                                    }
+                                                    @if (item.BeginningTime == Model.Meeting.BeginningTime && item.EndTime == Model.Meeting.EndTime)
+                                                    {
+                                                        @Html.Raw("Ok")
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (item.EmployeeId != Model.Meeting.EmployeeId)
+                                                    {
+                                                        @Html.ActionLink("Remove Member", "RemoveMember", "MeetingMembers", new { employeeId = item.EmployeeId, _meetingId = item.MeetingId }, null)
+
+                                                        @Html.Raw(" | ")
+
+                                                    }
+                                                    @if (item.BeginningTime != Model.Meeting.BeginningTime || item.EndTime != Model.Meeting.EndTime && item.IsBusy == false)
+                                                    {
+                                                        @Html.ActionLink("Update Schedule", "UpdateSchedule", "Meeting", new { employeeId = item.EmployeeId, _meetingId = item.MeetingId }, null)
+
+                                                        @Html.Raw(" | ")
+                                                    }
+                                                    @Html.ActionLink("Send Email", "SendingEmailMember", "MeetingMembers", new { employeeId = item.EmployeeId, _meetingId = item.MeetingId }, null)
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="MeetingId" value="@Model.Meeting.MeetingId" />
+        <button id="openMemberModalButton" class="btn btn-success" value="">Add Member</button>
+    </div>
+
+</div>
+

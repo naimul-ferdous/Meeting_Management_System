@@ -1,0 +1,86 @@
+﻿@model  IEnumerable<MeetingManagementSystem.ViewModels.MeetingMemberVM>
+
+
+@{
+
+    var loop = 0;
+
+}
+
+@*modal start*@
+<div class="modal fade" id="memberModal" tabindex="-1" role="dialog" aria-labelledby="memberModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                @*<h4 class="modal-title" id="memberModalLabel">Add Meeting Member</h4>*@
+            </div>
+
+            <div class="modal-body">
+
+                <div class="panel panel-info" style="margin-top: 8px">
+                    <div class="panel-heading text-center"><span class="panelHeadText">Available Employees</span></div>
+                    <div class="panel-body">
+                        <form id="meetingMemberForm">
+                            @*<input type="hidden" name="MeetingId" value="@Model.Meeting.MeetingId" />*@
+                            <div class="table table-responsive">
+
+                                <table id="allEmployeesTable" class="table table-bordered table-striped table-condensed" style="width: 100%">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <input type="checkbox" class="select_all" />
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Employee.EmployeeName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Employee.Department)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Employee.Designation)
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+
+                                            <tr>
+                                                <td>
+                                                    @Html.CheckBoxFor(modelItem => Model.ToList()[loop].IsSelected)
+                                                    @Html.HiddenFor(modelItem => Model.ToList()[loop].EmployeeId)
+                                                    @Html.HiddenFor(modelItem => Model.ToList()[loop].MeetingId)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Department.DepartmentName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Designation.DesignationName)
+                                                </td>
+                                            </tr>
+                                            loop = loop + 1;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
+                    </div>
+                 
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Add Members" class="btn btn-default btnAddMember" />
+                @*<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+@*modal end*@
