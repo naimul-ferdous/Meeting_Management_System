@@ -1,4 +1,4 @@
-# Meeting_Management_System
+# Meeting Management System
 Meeting Management System for Systech Digital Limited
 
 This system has the features for managing Meeting, Venue, Company, Schedule integrated with 
