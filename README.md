@@ -33,27 +33,33 @@ System Requirement Specification
 User Requirement:
 
 1.Agenda/Issue
+	
 	Employees will have the option to organize a meeting. There will be options to provide meeting agenda and add participants. The whole meeting can be controlled by this system. 
 	Higher authority of the organization will be able to authorize the meeting.
 
 2.Discussion
+	
 	Meeting holder and all the participants will have the privilege to provide their opinion and discussions about the meeting. All the participants will be able to create a better communication by this feature.
 	It will help an employee to understand every aspect of the meeting and thoughts of other employees about the topic of the meeting. 
 
 3.Decision
+	
 	A meeting may end up with a result or not. The system will have option to provide decision or result of the meeting. So every member will be notified by the system.
 	There is another section for implementation. 
 
 4.Implementation
+	
 	If any project is finalized in a meeting then the system will have option to give update on that project.
 	Implementation updates will be sent to every meeting holder.
 
 5.Stakeholder
+	
 	Employees of the office and outside members can be stakeholder of a meeting. 
 	A meeting holder can get any employee for meeting if he/she is free at that time. The system will prevent to add any member if he/she is preoccupied. 
 	Outside members will have to fill a registration form before participating to keep a record. 
 
 6.Scheduling
+	
 	Meeting schedules of each employee.
 	Every members of a particular meeting will be notified before the scheduled time of the meeting.
 	The system will keep track of every employees meeting schedule to prevent time clash.
@@ -62,6 +68,7 @@ User Requirement:
 	Employees will get meeting reminder in Google calendar.
 
 7.Venue
+	
 	Each meeting will take place in the selected venue. System will give to option to select venue.
 	There will be two types of venue. One in internal venue and another is external venue. 
 	Internal venues can be selected if vacant.
@@ -69,9 +76,11 @@ User Requirement:
 	The system will also keep records of external venues.
 
 8.Logistics
+	
 	Everything necessary for a meeting can be included in the meeting logistics.
 	Available logistics of an internal venue can be seen.  
 
 9.Entertainment
+	
 	Meeting organizers can provide information’s of entertainment facilities of a meeting.
 
