@@ -28,7 +28,7 @@ A meeting management system is a highly effective way to boost customer satisfac
 also helps companies plan resources by providing a clear view of the future with respect to their
 meetings.
 
-#System Requirement Specification
+System Requirement Specification
 
 User Requirement:
 
